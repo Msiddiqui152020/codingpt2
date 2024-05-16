@@ -1,0 +1,128 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class RestaurantBilling {
+
+    // Lists to hold menu items and their prices
+    private static ArrayList<String> menuItems = new ArrayList<>();
+    private static ArrayList<Double> menuPrices = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);  // Scanner for user input
+
+    public static void main(String[] args) {
+        // Main loop for the program menu
+        while (true) {
+            // Displaying user choices
+            System.out.println("What would you like to do?");
+            System.out.println("1: Calculate a total");
+            System.out.println("2: Add an item to the menu");
+            System.out.println("3: Delete an item from the menu");
+            System.out.println("4: Change the price of an item");
+            System.out.println("5: Exit");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline left from previous input
+
+            // Handling user choices
+            switch (choice) {
+                case 1:
+                    calculateTotal();
+                    break;
+                case 2:
+                    addItem();
+                    break;
+                case 3:
+                    deleteItem();
+                    break;
+                case 4:
+                    changePrice();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    // Method to calculate the total price of ordered items
+    private static void calculateTotal() {
+        double total = 0.0;  // Variable to store the total price
+
+        // Loop for getting items from the user
+        while (true) {
+            System.out.println("Enter an item name or 'done' to finish:");
+            
+            // Displaying available menu items
+            for (int i = 0; i < menuItems.size(); i++) {
+                System.out.println((i + 1) + ": " + menuItems.get(i) + " - $" + menuPrices.get(i));
+            }
+            
+            String item = scanner.nextLine();
+
+            // Exiting loop if user is done entering items
+            if ("done".equalsIgnoreCase(item)) {
+                break;
+            }
+
+            // Adding item's price to total if it exists
+            if (menuItems.contains(item)) {
+                int index = menuItems.indexOf(item);
+                total += menuPrices.get(index);
+            } else {
+                System.out.println("Invalid item name. Please try again.");
+            }
+        }
+        
+        System.out.println("Total: $" + total);  // Displaying the calculated total
+    }
+
+    // Method to add a new item to the menu
+    private static void addItem() {
+        System.out.println("Enter the name of the item:");
+        String item = scanner.nextLine();
+
+        System.out.println("Enter the price of the item:");
+        double price = scanner.nextDouble();
+        
+        menuItems.add(item);
+        menuPrices.add(price);
+        
+        System.out.println("Item added successfully!");
+    }
+
+    // Method to remove an item from the menu
+    private static void deleteItem() {
+        System.out.println("Enter the name of the item to delete:");
+        String item = scanner.nextLine();
+
+        // Checking if item exists in the menu
+        if (menuItems.contains(item)) {
+            int index = menuItems.indexOf(item);
+            menuItems.remove(index);
+            menuPrices.remove(index);
+            System.out.println("Item deleted successfully!");
+        } else {
+            System.out.println("Item not found.");
+        }
+    }
+
+    // Method to change the price of a menu item
+    private static void changePrice() {
+        System.out.println("Enter the name of the item:");
+        String item = scanner.nextLine();
+
+        // Checking if the item exists in the menu
+        if (menuItems.contains(item)) {
+            int index = menuItems.indexOf(item);
+            System.out.println("Enter the new price:");
+            double newPrice = scanner.nextDouble();
+
+            menuPrices.set(index, newPrice);
+            
+            System.out.println("Price updated successfully!");
+        } else {
+            System.out.println("Item not found.");
+        }
+    }
+}
